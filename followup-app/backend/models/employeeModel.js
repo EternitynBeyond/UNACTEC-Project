@@ -7,5 +7,9 @@ export const getAllEmployees = async () => {
 
 export const addEmployee = async (data) => {
   const { nombre, cargo, puntaje } = data;
-  await pool.query('INSERT INTO employees (nombre, cargo, puntaje) VALUES (?, ?, ?)', [nombre, cargo, puntaje]);
+  const [result] = await pool.query(
+    'INSERT INTO employees (nombre, cargo, puntaje) VALUES (?, ?, ?)',
+    [nombre, cargo, puntaje]
+  );
+  return result.insertId;
 };

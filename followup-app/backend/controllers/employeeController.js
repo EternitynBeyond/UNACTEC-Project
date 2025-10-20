@@ -5,15 +5,17 @@ export const listarEmpleados = async (req, res) => {
     const empleados = await getAllEmployees();
     res.json(empleados);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error al listar empleados:', err.message);
+    res.status(500).json({ error: 'Error al obtener empleados' });
   }
 };
 
 export const registrarEmpleado = async (req, res) => {
   try {
-    await addEmployee(req.body);
-    res.json({ message: 'Empleado registrado correctamente' });
+    const id = await addEmployee(req.body);
+    res.status(201).json({ message: 'Empleado registrado correctamente', id });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error al registrar empleado:', err.message);
+    res.status(500).json({ error: 'Error al registrar empleado' });
   }
 };
