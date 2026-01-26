@@ -1,3 +1,5 @@
+console.log("✅ script.js cargó correctamente");
+
 const API_URL = "https://unactec-project.onrender.com/api/employees";
 
 const employeeSelect = document.getElementById("employeeSelect");
