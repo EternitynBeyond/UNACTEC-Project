@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:4000/api/employees';
+const API_URL = 'https://unactec-project.onrender.com/api/employees';
 
 const form = document.getElementById('employeeForm');
 const list = document.getElementById('employeeList');
