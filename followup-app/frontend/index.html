@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UNACTEC Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="bg-[#0f172a] text-white font-sans">
@@ -13,13 +14,19 @@
 
   <!-- SIDEBAR -->
   <div class="w-64 bg-[#1e293b] p-6 space-y-6">
+<button id="logoutBtn" class="text-red-400 hover:text-red-600">
+  Logout
+</button>
+
+
     <h1 class="text-xl font-bold">UNACTEC</h1>
 
-    <nav class="space-y-3">
-      <button onclick="showSection(event,'overview')" class="nav-btn block w-full text-left hover:text-blue-400">Overview</button>
-      <button onclick="showSection(event,'performance')" class="nav-btn block w-full text-left hover:text-blue-400">Performance</button>
-      <button onclick="showSection(event,'employees')" class="nav-btn block w-full text-left hover:text-blue-400">Employees</button>
-    </nav>
+<nav class="space-y-3">
+  <button data-section="overview" class="nav-btn block w-full text-left hover:text-blue-400">Overview</button>
+  <button data-section="performance" class="nav-btn block w-full text-left hover:text-blue-400">Performance</button>
+  <button data-section="employees" class="nav-btn block w-full text-left hover:text-blue-400">Employees</button>
+</nav>
+
   </div>
 
   <!-- MAIN CONTENT -->
@@ -69,106 +76,53 @@
 
     <!-- EMPLOYEES -->
     <div id="employees" class="section hidden">
-      <h2 class="text-2xl font-bold mb-6">Employees List</h2>
+  <h2 class="text-2xl font-bold mb-6">Employees List</h2>
 
-      <table class="w-full text-left">
-        <thead>
-          <tr class="border-b border-gray-600">
-            <th class="py-2">Name</th>
-            <th class="py-2">Department</th>
-            <th class="py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-gray-700">
-            <td class="py-2">Juan Pérez</td>
-            <td>Sales</td>
-            <td class="text-green-400">Active</td>
-          </tr>
-          <tr class="border-b border-gray-700">
-            <td class="py-2">Ana López</td>
-            <td>Support</td>
-            <td class="text-green-400">Active</td>
-          </tr>
-          <tr>
-            <td class="py-2">Carlos Gómez</td>
-            <td>QA</td>
-            <td class="text-yellow-400">On Leave</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- FORM ADD EMPLOYEE -->
+  <div class="bg-[#1e293b] p-4 rounded mb-6">
+    <div class="grid grid-cols-3 gap-4">
+      <input id="newName" type="text" placeholder="Name" class="p-2 rounded bg-[#0f172a] text-white">
+      <input id="newDepartment" type="text" placeholder="Department" class="p-2 rounded bg-[#0f172a] text-white">
+     <button id="addEmployeeBtn" class="bg-blue-500 hover:bg-blue-600 p-2 rounded">
+        Add Employee
+      </button>
+<div class="bg-[#1e293b] p-4 rounded mt-6">
+  <h3 class="mb-4 font-bold">Add Monthly Metrics</h3>
+
+  <div class="grid grid-cols-4 gap-4">
+    <input id="metricMonth" type="month" class="p-2 rounded bg-[#0f172a] text-white">
+    <input id="metricCallTime" placeholder="Avg Call Time" class="p-2 rounded bg-[#0f172a] text-white">
+    <input id="metricCSAT" placeholder="Customer Satisfaction %" class="p-2 rounded bg-[#0f172a] text-white">
+    <input id="metricQA" placeholder="Quality Assurance %" class="p-2 rounded bg-[#0f172a] text-white">
+  </div>
+
+  <button id="addMetricBtn" class="mt-4 bg-green-500 hover:bg-green-600 p-2 rounded">
+    Add Metrics
+  </button>
+</div>
+
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <table class="w-full text-left">
+    <thead>
+      <tr class="border-b border-gray-600">
+        <th class="py-2">Name</th>
+        <th class="py-2">Department</th>
+        <th class="py-2">Status</th>
+        <th class="py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody id="employeeTable">
+    </tbody>
+  
     </div>
 
   </div>
 </div>
 
-<script>
-
-/* ================= MOCK DATA ================= */
-
-const employeeData = {
-  1: {
-    avgCallTime: "5 min 30 sec",
-    customerSatisfaction: "92%",
-    qualityAssurance: "95%"
-  },
-  2: {
-    avgCallTime: "4 min 50 sec",
-    customerSatisfaction: "88%",
-    qualityAssurance: "90%"
-  },
-  3: {
-    avgCallTime: "6 min 10 sec",
-    customerSatisfaction: "85%",
-    qualityAssurance: "87%"
-  }
-};
-
-/* ================= UPDATE DASHBOARD ================= */
-
-const employeeSelect = document.getElementById("employeeSelect");
-
-employeeSelect.addEventListener("change", function () {
-  const selected = this.value;
-
-  document.getElementById("avgCallTime").textContent =
-    employeeData[selected].avgCallTime;
-
-  document.getElementById("customerSatisfaction").textContent =
-    employeeData[selected].customerSatisfaction;
-
-  document.getElementById("qualityAssurance").textContent =
-    employeeData[selected].qualityAssurance;
-});
-
-/* Cargar datos al iniciar */
-window.addEventListener("DOMContentLoaded", () => {
-  employeeSelect.dispatchEvent(new Event("change"));
-  document.querySelector(".nav-btn").classList.add("text-blue-400", "font-bold");
-});
-
-/* ================= SIDEBAR NAVIGATION ================= */
-
-function showSection(event, sectionId) {
-
-  // Ocultar todas las secciones
-  document.querySelectorAll(".section").forEach(section => {
-    section.classList.add("hidden");
-  });
-
-  // Mostrar la seleccionada
-  document.getElementById(sectionId).classList.remove("hidden");
-
-  // Quitar estilo activo
-  document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.classList.remove("text-blue-400", "font-bold");
-  });
-
-  // Activar botón actual
-  event.target.classList.add("text-blue-400", "font-bold");
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
